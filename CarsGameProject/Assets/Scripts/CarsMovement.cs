@@ -8,7 +8,7 @@ public class CarsMovement : MonoBehaviour
 	List<Vector3> travel;
 	List<GameObject> sphepres;
 	List<GameObject> travelSpheres;
-	GameObject Car;
+	public GameObject Car;
 	List<Vector3[]> original;
 	bool flag = false;
 	int index;
