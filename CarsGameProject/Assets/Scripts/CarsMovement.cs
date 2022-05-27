@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class CarsMovement : MonoBehaviour
 {
-	List<Vector3> cntrl;
-	List<Vector3> travel;
-	List<GameObject> sphepres;
-	List<GameObject> travelSpheres;
+	List<Vector3> trajectory, curve;
+	public List<Vector3> movementPoints;
 	public GameObject Car;
-	List<Vector3[]> original;
+	public GameObject TrajectoryPoints;
+	public GameObject CurvePoints;
+	Vector3[] originals;
+	Vector3 pos; 
 	bool flag = false;
 	int index;
+	float param;
+	Vector3 start;
+    Vector3 end;
 
 	Vector3[] ApplyTransformation(Vector3[] verts, Matrix4x4 m)
 	{
@@ -29,24 +33,69 @@ public class CarsMovement : MonoBehaviour
 		}
 		return result;
 	}
+	Vector3 interpolation(Vector3 A, Vector3 B, float t){
+        return A + t * (B-A);
+    }
 	// Start is called before the first frame update
 	void Start()
     {
-		original = new List<Vector3[]>();
-		travelSpheres = new List<GameObject>();
-		sphepres = new List<GameObject>();
-		travel = new List<Vector3>();
-		cntrl = new List<Vector3>();
-		//Add point of interest for curves
-		Car = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		//Transformation.cs
+		
+		trajectory = new List<Vector3>();
+		curve = new List<Vector3>();
+		movementPoints = new List<Vector3>();
+		originals = Car.GetComponent<MeshFilter>().mesh.vertices;
+		pos = Vector3.zero;
+		start = Vector3.zero;
+		end = Vector3.zero; 
+		param = 0;
+		index = 0;
+
+		for (int i = 0; i < TrajectoryPoints.transform.childCount; i++)
+        {
+            GameObject point = TrajectoryPoints.transform.GetChild(i).gameObject;
+            GameObject point2 = CurvePoints.transform.GetChild(i).gameObject;
+            trajectory.Add(point.transform.position);
+            curve.Add(point2.transform.position);
+        }
+
+		List<Vector3> temp = new List<Vector3>();
+
+		for (int i = 0; i < trajectory.Count-1; i++)
+        {
+            for (float x = 0; x < 1; x += 0.01f)
+            {
+                temp = new List<Vector3>();
+                temp.Add(trajectory[i]);
+                temp.Add(curve[i]);
+                temp.Add(trajectory[i+1]);
+                movementPoints.Add(EvalBeizer(temp, x));
+            }
+        }
+
 
 	}
 
     // Update is called once per frame
     void Update()
     {
-        
+		if (Input.GetKey(KeyCode.W))
+        {
+        param += 0.0001f;
+		start = movementPoints[index];
+		end = movementPoints[index + 1];
+        pos = interpolation(start,end, param);
+		Vector3 prev = interpolation(start,end, param-0.0005f);
+		Vector3 dir = pos -prev;
+        Vector3 du = dir.normalized;
+        float angle = Mathf.Rad2Deg*Mathf.Atan(du.z/du.x);
+        Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
+		Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
+		Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
+		index += 1;
+		if (index == movementPoints.Count - 1){
+			index = 0;
+		}
+		}
     }
 
 	Vector3 EvalBeizer(List<Vector3> P, float t)
@@ -60,6 +109,17 @@ public class CarsMovement : MonoBehaviour
 		}
 		return p;
 	}
+
+	void printRedDots()
+    {
+        for (int i = 0; i < movementPoints.Count; i++)
+        {
+            GameObject red_sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            red_sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
+            red_sphere.transform.position = movementPoints[i];
+        }
+    }
+
 	float Combination(int n, int i)
 	{
 		return (float)(Factorial(n) / (Factorial(i) * Factorial(n - i)));
