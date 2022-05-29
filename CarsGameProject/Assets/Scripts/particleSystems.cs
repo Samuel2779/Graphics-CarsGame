@@ -25,14 +25,15 @@ public class particleSystems : MonoBehaviour
 		cam = new Camera();
 		cam = Camera.main;
 		particles = new List<GameObject>();
+		//Get particle intanciated in CarMovement, and add its forces, p, mass, etc.
 		for(int i = 0; i < N; i++)
 		{
 			GameObject p = new GameObject();
 			p.AddComponent<particlesClass>();
 			particlesClass part = p.GetComponent<particlesClass>();
-			float x = Random.Range(-7.0f, 7.0f);
-			float y = Random.Range(10f, 14.5f);
-			float z = Random.Range(-7.0f, 7.0f);
+			float x = Random.Range(-113.59f, -130f);
+			float y = Random.Range(11f, 12f);
+			float z = Random.Range(8f, 12.0f);
 			part.p = new Vector3(x, y, z);
 			part.forces = Vector3.zero;
 			part.forces.x = Random.Range(-5.0f, 5.0f);

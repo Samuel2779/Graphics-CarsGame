@@ -7,9 +7,10 @@ public class CarsMovement : MonoBehaviour
 	List<Vector3> trajectory, curve;
 	public List<Vector3> movementPoints;
 	public GameObject Car;
+	GameObject CarCollider;
 	public GameObject TrajectoryPoints;
 	public GameObject CurvePoints;
-	Vector3[] originals;
+	Vector3[] originals, colliderChild;
 	Vector3 pos; 
 	bool flag = false;
 	int index;
@@ -39,11 +40,12 @@ public class CarsMovement : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		
+		CarCollider = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 		trajectory = new List<Vector3>();
 		curve = new List<Vector3>();
 		movementPoints = new List<Vector3>();
 		originals = Car.GetComponent<MeshFilter>().mesh.vertices;
+		colliderChild = CarCollider.GetComponent<MeshFilter>().mesh.vertices;
 		pos = Vector3.zero;
 		start = Vector3.zero;
 		end = Vector3.zero; 
@@ -91,6 +93,8 @@ public class CarsMovement : MonoBehaviour
         Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
 		Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
 		Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
+		Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
+		CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
 		index += 1;
 		if (index == movementPoints.Count - 1){
 			index = 0;

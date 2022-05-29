@@ -82,34 +82,34 @@ public class particlesClass : MonoBehaviour
 	}
 	void CheckWalls()
 	{
-		if(p.x > 7.5f - r)
+		if(p.x > -112f - r)
 		{
 			forces.x = -forces.x * rc;
 			float diff = prev.x - p.x;
-			p.x = 7.5f - r;
-			prev.x = 7.5f - r - diff;
+			p.x = -112f - r;
+			prev.x = -112f - r - diff;
 		}
 		
-		else if (p.x < -7.5f + r)
+		else if (p.x < -133f + r)
 		{
 			forces.x = -forces.x * rc;
 			float diff = prev.x - p.x;
-			p.x = -7.5f + r;
-			prev.x = -7.5f + r - diff;
+			p.x = -131f + r;
+			prev.x = -131f + r - diff;
 		}
-		if (p.z > 7.5f - r)
+		if (p.z > 13f - r)
 		{
 			forces.z = -forces.z * rc;
 			float diff = prev.z - p.z;
-			p.z = 7.5f - r;
-			prev.z = 7.5f - r - diff;
+			p.z = 13f - r;
+			prev.z = 13f - r - diff;
 		}
-		else if (p.z < -7.5f + r)
+		else if (p.z < 3f  - r)
 		{
 			forces.z = -forces.z * rc;
 			float diff = prev.z - p.z;
-			p.z = -7.5f + r;
-			prev.z = -7.5f + r - diff;
+			p.z = 3f - r;
+			prev.z = 3f - r - diff;
 		}
 		if (p.y > 15f - r)
 		{
