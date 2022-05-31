@@ -17,6 +17,7 @@ public class CarsMovement : MonoBehaviour
 	float param;
 	Vector3 start;
     Vector3 end;
+	public bool AI;
 	public KeyCode keyCode;
 
 	Vector3[] ApplyTransformation(Vector3[] verts, Matrix4x4 m)
@@ -85,27 +86,53 @@ public class CarsMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKey(keyCode))
-        {
-        param += 0.0001f;
-		start = movementPoints[index];
-		end = movementPoints[index + 1];
-        pos = interpolation(start,end, param);
-		Vector3 prev = interpolation(start,end, param-0.0005f);
-		Vector3 dir = pos -prev;
-        Vector3 du = dir.normalized;
-        float angle = Mathf.Rad2Deg*Mathf.Atan(du.z/du.x);
-        Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
-		Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
-		Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
-		Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
-		CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
-		index += 1;
-		if (index == movementPoints.Count - 1){
-			index = 0;
+		if (!AI)
+		{
+
+			if (Input.GetKey(keyCode))
+			{
+				param += 0.0001f;
+				start = movementPoints[index];
+				end = movementPoints[index + 1];
+				pos = interpolation(start,end, param);
+				Vector3 prev = interpolation(start,end, param-0.0005f);
+				Vector3 dir = pos -prev;
+				Vector3 du = dir.normalized;
+				float angle = Mathf.Rad2Deg*Mathf.Atan(du.z/du.x);
+				Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
+				Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
+				Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
+				Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
+				CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
+				index += 1;
+			if (index == movementPoints.Count - 1)
+				{
+				index = 0;
+				}
+			}
+		} else
+		{
+			param += 0.0001f;
+			start = movementPoints[index];
+			end = movementPoints[index + 1];
+			pos = interpolation(start, end, param);
+			Vector3 prev = interpolation(start, end, param - 0.0005f);
+			Vector3 dir = pos - prev;
+			Vector3 du = dir.normalized;
+			float angle = Mathf.Rad2Deg * Mathf.Atan(du.z / du.x);
+			Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
+			Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
+			Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
+			Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
+			CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
+			index += 1;
+			if (index == movementPoints.Count - 1)
+			{
+				index = 0;
+			}
 		}
-		}
-    }
+
+	}
 
 	Vector3 EvalBeizer(List<Vector3> P, float t)
 	{
