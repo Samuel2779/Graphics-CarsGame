@@ -5,11 +5,11 @@ using UnityEngine;
 public class CarsMovement : MonoBehaviour
 {
 	List<Vector3> trajectory, curve;
-	public List<Vector3> movementPoints;
+	List<Vector3> movementPoints;
 	public GameObject Car;
 	GameObject CarCollider;
-	public GameObject TrajectoryPoints;
-	public GameObject CurvePoints;
+	public List<Vector3> TrajPoints;
+	public List<Vector3> CurvPoints;
 	Vector3[] originals, colliderChild;
 	Vector3 pos; 
 	bool flag = false;
@@ -17,6 +17,7 @@ public class CarsMovement : MonoBehaviour
 	float param;
 	Vector3 start;
     Vector3 end;
+	public KeyCode keyCode;
 
 	Vector3[] ApplyTransformation(Vector3[] verts, Matrix4x4 m)
 	{
@@ -52,13 +53,17 @@ public class CarsMovement : MonoBehaviour
 		param = 0;
 		index = 0;
 
-		for (int i = 0; i < TrajectoryPoints.transform.childCount; i++)
+		for (int i = 0; i < TrajPoints.Count; i++)
         {
-            GameObject point = TrajectoryPoints.transform.GetChild(i).gameObject;
-            GameObject point2 = CurvePoints.transform.GetChild(i).gameObject;
-            trajectory.Add(point.transform.position);
-            curve.Add(point2.transform.position);
+            Vector3 point = TrajPoints[i];
+            trajectory.Add(point);
         }
+		for (int i = 0; i < CurvPoints.Count; i++)
+		{
+			Vector3 point2 = CurvPoints[i];
+			curve.Add(point2);
+		}
+
 
 		List<Vector3> temp = new List<Vector3>();
 
@@ -80,7 +85,7 @@ public class CarsMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKey(KeyCode.W))
+		if (Input.GetKey(keyCode))
         {
         param += 0.0001f;
 		start = movementPoints[index];
