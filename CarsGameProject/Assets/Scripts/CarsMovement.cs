@@ -102,8 +102,9 @@ public class CarsMovement : MonoBehaviour
 				Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
 				Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
 				Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
+				var mf = Car.GetComponent<MeshFilter>();
+				mf.mesh.bounds = new Bounds(transform.position, new Vector3(10, 5, 1));
 
-				Car.GetComponent<MeshFilter>().mesh.bounds = new Bounds(Car.transform.position, new Vector3(2, 2, 2));
 				Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
 				CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
 				index += 1;
