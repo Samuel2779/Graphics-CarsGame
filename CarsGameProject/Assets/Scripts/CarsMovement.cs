@@ -102,6 +102,8 @@ public class CarsMovement : MonoBehaviour
 				Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
 				Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
 				Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
+
+				Car.GetComponent<MeshFilter>().mesh.bounds = new Bounds(Car.transform.position, new Vector3(2, 2, 2));
 				Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
 				CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
 				index += 1;
@@ -123,6 +125,7 @@ public class CarsMovement : MonoBehaviour
 			Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
 			Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
 			Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
+			Car.GetComponent<MeshFilter>().mesh.RecalculateBounds();
 			Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
 			CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
 			index += 1;
@@ -131,7 +134,7 @@ public class CarsMovement : MonoBehaviour
 				index = 0;
 			}
 		}
-
+		
 	}
 
 	Vector3 EvalBeizer(List<Vector3> P, float t)
