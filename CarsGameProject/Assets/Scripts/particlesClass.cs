@@ -122,6 +122,11 @@ public class particlesClass : MonoBehaviour
 		
 	}
 
+	public void UpdateForces()
+	{
+
+	}
+
 	public bool CheckCollision(particlesClass other)
 	{
 		float dx = other.p.x - p.x;

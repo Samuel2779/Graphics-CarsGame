@@ -7,7 +7,7 @@ public class CarsMovement : MonoBehaviour
 	List<Vector3> trajectory, curve;
 	List<Vector3> movementPoints;
 	public GameObject Car;
-	GameObject CarCollider;
+	public GameObject CarCollider;
 	public List<Vector3> TrajPoints;
 	public List<Vector3> CurvPoints;
 	Vector3[] originals, colliderChild;
@@ -42,7 +42,7 @@ public class CarsMovement : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		CarCollider = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		
 		trajectory = new List<Vector3>();
 		curve = new List<Vector3>();
 		movementPoints = new List<Vector3>();
@@ -107,6 +107,8 @@ public class CarsMovement : MonoBehaviour
 
 				Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
 				CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
+				var mf2 = Car.GetComponent<MeshFilter>();
+				mf2.mesh.bounds = new Bounds(transform.position, new Vector3(10, 5, 1));
 				index += 1;
 			if (index == movementPoints.Count - 1)
 				{
@@ -126,9 +128,12 @@ public class CarsMovement : MonoBehaviour
 			Matrix4x4 r = Transformations.RotateM(angle, Transformations.AXIS.AX_Y);
 			Matrix4x4 t = Transformations.TranslateM(pos.x, pos.y, pos.z);
 			Car.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(originals, t * r);
-			Car.GetComponent<MeshFilter>().mesh.RecalculateBounds();
-			Matrix4x4 scSp = Transformations.ScaleM(3f, 3f, 3f);
+			var mf = Car.GetComponent<MeshFilter>();
+			mf.mesh.bounds = new Bounds(transform.position, new Vector3(10, 5, 1));
+			Matrix4x4 scSp = Transformations.ScaleM(4f, 4f, 4f);
 			CarCollider.GetComponent<MeshFilter>().mesh.vertices = ApplyTransformation(colliderChild, t * r * scSp);
+			var mf2 = Car.GetComponent<MeshFilter>();
+			mf2.mesh.bounds = new Bounds(transform.position, new Vector3(10, 5, 1));
 			index += 1;
 			if (index == movementPoints.Count - 1)
 			{

@@ -13,6 +13,8 @@ public class particleSystems : MonoBehaviour
 {
 	public int N;
 	List<GameObject> particles;
+	List<GameObject> particlesCarList;
+	public List<GameObject> carParticles = new List<GameObject>();
 	public Camera cam;
 	float near;
 	float far;
@@ -25,8 +27,10 @@ public class particleSystems : MonoBehaviour
 		cam = new Camera();
 		cam = Camera.main;
 		particles = new List<GameObject>();
+		
+
 		//Get particle intanciated in CarMovement, and add its forces, p, mass, etc.
-		for(int i = 0; i < N; i++)
+		for (int i = 0; i < N; i++)
 		{
 			GameObject p = new GameObject();
 			p.AddComponent<particlesClass>();
@@ -38,7 +42,7 @@ public class particleSystems : MonoBehaviour
 			part.forces = Vector3.zero;
 			part.forces.x = Random.Range(-5.0f, 5.0f);
 			part.forces.z = Random.Range(-5.0f, 5.0f);
-			part.r = Random.Range(0.2f, 0.5f);
+			part.r = Random.Range(1.2f, 1.5f);
 			part.g = 9.81f;
 			part.mass = part.r * 2f;
 			part.rc = 0.1f;
@@ -53,60 +57,46 @@ public class particleSystems : MonoBehaviour
 		fheight = 2.0f * near * Mathf.Tan(cam.fieldOfView* 0.5f * Mathf.Deg2Rad);
 		fwight = fheight * cam.aspect;
 		RadarOn = true;
+		
 	}
 
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKey("a"))
+		
+		for (int i = 0;i < carParticles.Count; i++)
 		{
-			cam.transform.RotateAround(cam.transform.position, Vector3.up, -50.0f * Time.deltaTime);
-		}
-		if (Input.GetKey("d"))
-		{
-			cam.transform.RotateAround(cam.transform.position, Vector3.up, 50.0f * Time.deltaTime);
-		}
-		if (Input.GetKeyDown("s"))
-		{
-			RadarOn = !RadarOn;
-		}
-
-		bool flag = false;
-		for(int i = 0;i < N; i++)
-		{
-			flag = false;
-			particlesClass p = particles[i].GetComponent<particlesClass>();
-			if (RadarOn)
-			{
-				RadarVFC(p);
-			}else
-			{
-				p.sph.GetComponent<MeshRenderer>().enabled = true;
-			}
-			
-			Color originalColor = p.color;
+			float x = carParticles[i].GetComponent<MeshFilter>().mesh.vertices[0].x;
+			float y = carParticles[i].GetComponent<MeshFilter>().mesh.vertices[0].y;
+			float z = carParticles[i].GetComponent<MeshFilter>().mesh.vertices[0].z;
+			Vector3 p = new Vector3(x, y, z);
 			for (int j = 0; j < N; j++)
 			{
-				if(j != i)
+				particlesClass c = particles[j].GetComponent<particlesClass>();
+					//Get radious of the sphere colider
+				if (CheckCollisionWithCarColider(c,p ,4f))
 				{
-					particlesClass c = particles[j].GetComponent<particlesClass>();
-					if (p.CheckCollision(c))
-					{
-						p.sph.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1f, 0f, 0f));
-						c.sph.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1f, 0f, 0f));
-						flag = true;
-					}
+						// update force of c.sph
+					c.sph.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1f, 0f, 0f));
 				}
 				
+				
 			}
-			if (!flag)
-			{
-				//return original color
-				p.sph.GetComponent<MeshRenderer>().material.SetColor("_Color", originalColor);
-			}
+
 		}
         
     }
+	private bool CheckCollisionWithCarColider(particlesClass other, Vector3 current, float r)
+	{
+		float dx = other.p.x - current.x;
+		float dy = other.p.y - current.y;
+		float dz = other.p.z - current.z;
+
+		float sumR = other.r + r;
+		sumR *= sumR;
+
+		return sumR > (dx * dx + dy * dy + dz * dz);
+	}
 
 	private void RadarVFC(particlesClass p)
 	{
