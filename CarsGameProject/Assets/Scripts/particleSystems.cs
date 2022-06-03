@@ -14,6 +14,7 @@ public class particleSystems : MonoBehaviour
 	public int N;
 	List<GameObject> particles;
 	List<GameObject> particlesCarList;
+	public List<GameObject> carsMovement = new List<GameObject>();
 	public List<GameObject> carParticles = new List<GameObject>();
 	public Camera cam;
 	float near;
@@ -76,7 +77,11 @@ public class particleSystems : MonoBehaviour
 					//Get radious of the sphere colider
 				if (CheckCollisionWithCarColider(c,p ,4f))
 				{
-						// update force of c.sph
+					CarsMovement car = carsMovement[i].GetComponent<CarsMovement>();
+					car.Health = car.Health - 1;
+					// update force of c.sph
+					Vector3 connectDirection = c.p - p;
+					c.UpdateForces(connectDirection);
 					c.sph.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1f, 0f, 0f));
 				}
 				

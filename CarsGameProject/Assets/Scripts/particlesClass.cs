@@ -122,8 +122,19 @@ public class particlesClass : MonoBehaviour
 		
 	}
 
-	public void UpdateForces()
+	public void UpdateForces(Vector3 dir)
 	{
+		forces = -forces * rc;
+		Vector3 diff = prev - p;
+		//update Positions
+		p.x = prev.x - r;
+		p.y = prev.y - r;
+		p.z = prev.z - r;
+
+		prev.x  = prev.x - diff.x;
+		prev.y = prev.y - diff.y;
+		prev.z = prev.z - diff.z;
+
 
 	}
 

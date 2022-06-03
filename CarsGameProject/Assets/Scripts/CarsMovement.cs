@@ -20,6 +20,8 @@ public class CarsMovement : MonoBehaviour
 	public bool AI;
 	public KeyCode keyCode;
 
+	public int Health;
+
 	Vector3[] ApplyTransformation(Vector3[] verts, Matrix4x4 m)
 	{
 		int number = verts.Length;
