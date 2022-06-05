@@ -142,9 +142,18 @@ public class CarsMovement : MonoBehaviour
 				index = 0;
 			}
 		}
-		
+
+		HealthChecker();
 	}
 
+	private void HealthChecker()
+	{
+		if(Health < 0)
+		{
+			Car.GetComponent<MeshRenderer>().enabled = false;
+			CarCollider.GetComponent<MeshRenderer>().enabled = false;
+		}
+	}
 	Vector3 EvalBeizer(List<Vector3> P, float t)
 	{
 		int n = P.Count;
@@ -157,15 +166,7 @@ public class CarsMovement : MonoBehaviour
 		return p;
 	}
 
-	void printRedDots()
-    {
-        for (int i = 0; i < movementPoints.Count; i++)
-        {
-            GameObject red_sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            red_sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
-            red_sphere.transform.position = movementPoints[i];
-        }
-    }
+
 
 	float Combination(int n, int i)
 	{

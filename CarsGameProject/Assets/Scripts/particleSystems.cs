@@ -83,6 +83,10 @@ public class particleSystems : MonoBehaviour
 					Vector3 connectDirection = c.p - p;
 					c.UpdateForces(connectDirection);
 					c.sph.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1f, 0f, 0f));
+					StartCoroutine(DesRenderBall(c));
+					
+
+
 				}
 				
 				
@@ -91,6 +95,14 @@ public class particleSystems : MonoBehaviour
 		}
         
     }
+	IEnumerator DesRenderBall(particlesClass c)
+	{
+		
+		yield return new WaitForSeconds(4f);
+		c.sph.GetComponent<MeshRenderer>().enabled = false;
+
+	}
+	
 	private bool CheckCollisionWithCarColider(particlesClass other, Vector3 current, float r)
 	{
 		float dx = other.p.x - current.x;

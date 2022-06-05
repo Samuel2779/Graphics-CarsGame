@@ -126,14 +126,16 @@ public class particlesClass : MonoBehaviour
 	{
 		forces = -forces * rc;
 		Vector3 diff = prev - p;
+		Vector3 temp = p;
+		Vector3 d = Math.Normalize(dir);
 		//update Positions
-		p.x = prev.x - r;
-		p.y = prev.y - r;
-		p.z = prev.z - r;
+		p.x = prev.x + d.x;
+		p.y = prev.y + d.y;
+		p.z = prev.z + d.z;
 
-		prev.x  = prev.x - diff.x;
-		prev.y = prev.y - diff.y;
-		prev.z = prev.z - diff.z;
+		prev.x  = temp.x;
+		prev.y = temp.y;
+		prev.z = temp.z;
 
 
 	}
