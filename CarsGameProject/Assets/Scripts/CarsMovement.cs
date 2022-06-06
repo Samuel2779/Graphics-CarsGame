@@ -19,6 +19,9 @@ public class CarsMovement : MonoBehaviour
     Vector3 end;
 	public bool AI;
 	public KeyCode keyCode;
+	public GameObject TextHealth;
+	public int numPlayer;
+	public int indexTotal;
 
 	public int Health;
 
@@ -44,7 +47,7 @@ public class CarsMovement : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		
+		HealthPrinter();
 		trajectory = new List<Vector3>();
 		curve = new List<Vector3>();
 		movementPoints = new List<Vector3>();
@@ -55,6 +58,7 @@ public class CarsMovement : MonoBehaviour
 		end = Vector3.zero; 
 		param = 0;
 		index = 0;
+		indexTotal = 1;
 
 		for (int i = 0; i < TrajPoints.Count; i++)
         {
@@ -112,6 +116,7 @@ public class CarsMovement : MonoBehaviour
 				var mf2 = Car.GetComponent<MeshFilter>();
 				mf2.mesh.bounds = new Bounds(transform.position, new Vector3(10, 5, 1));
 				index += 1;
+				indexTotal++;
 			if (index == movementPoints.Count - 1)
 				{
 				index = 0;
@@ -137,6 +142,7 @@ public class CarsMovement : MonoBehaviour
 			var mf2 = Car.GetComponent<MeshFilter>();
 			mf2.mesh.bounds = new Bounds(transform.position, new Vector3(10, 5, 1));
 			index += 1;
+			indexTotal++;
 			if (index == movementPoints.Count - 1)
 			{
 				index = 0;
@@ -144,6 +150,15 @@ public class CarsMovement : MonoBehaviour
 		}
 
 		HealthChecker();
+		
+	}
+	public int returnIndex()
+	{
+		return index;
+	}
+	 public void HealthPrinter()
+	{
+		 TextHealth.GetComponent<UnityEngine.UI.Text>().text = "Health P" + numPlayer.ToString() + ": " + Health.ToString();
 	}
 
 	private void HealthChecker()

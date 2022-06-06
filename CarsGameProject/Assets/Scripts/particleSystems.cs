@@ -79,6 +79,7 @@ public class particleSystems : MonoBehaviour
 				{
 					CarsMovement car = carsMovement[i].GetComponent<CarsMovement>();
 					car.Health = car.Health - 1;
+					car.HealthPrinter();
 					// update force of c.sph
 					Vector3 connectDirection = c.p - p;
 					c.UpdateForces(connectDirection);
