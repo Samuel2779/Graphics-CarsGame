@@ -54,7 +54,7 @@ public class LapsController : MonoBehaviour
 		{
 			carPosition.Add(sortedIndex[i] + 1);
 		}
-		textPositions.GetComponent<UnityEngine.UI.Text>().text = "Positions:\n" + "Frist Place => P" + carPosition[3].ToString() + "\n" +
+		textPositions.GetComponent<UnityEngine.UI.Text>().text = "Positions:\n" + "First Place => P" + carPosition[3].ToString() + "\n" +
 			"Second Place => P" + carPosition[2].ToString() + "\n" + "Third Place => P" + carPosition[1].ToString() + "\n"
 			+ "Fourth Place => P" + carPosition[0].ToString() + "\n";
 	}
